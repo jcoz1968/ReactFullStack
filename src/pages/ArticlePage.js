@@ -8,9 +8,17 @@ const ArticlePage = ({ match }) => {
   const article = articleContent.find(article => article.name === name);
 
   const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+
   useEffect(() => { 
-    setArticleInfo({ upvotes: 3 });
-  });
+    const fetchData = async () => { 
+      const result = await fetch(`/api/articles/${name}`);
+      const body = await result.json();
+      console.log(body);
+      setArticleInfo(body);
+    }
+    fetchData();
+    // setArticleInfo({ upvotes: Math.ceil(Math.random() * 10) });
+  }, [name]);
 
   if (!article) return <NotFoundPage />;
   const otherArticles = articleContent.filter(article => article.name !== name);
